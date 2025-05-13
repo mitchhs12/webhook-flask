@@ -16,7 +16,11 @@ def webhook():
     }
 
     if DISCORD_WEBHOOK_URL:
-        requests.post(DISCORD_WEBHOOK_URL, json=message)
+        response = requests.post(DISCORD_WEBHOOK_URL, json=message)
+        print("Discord response status:", response.status_code)
+        print("Discord response text:", response.text)
+    else:
+        print("DISCORD_WEBHOOK_URL not set!")
 
     return "", 200
 
