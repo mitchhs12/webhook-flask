@@ -1,6 +1,7 @@
 from flask import Flask, request
 import requests
 import os
+import json
 
 app = Flask(__name__)
 
@@ -11,8 +12,11 @@ def webhook():
     data = request.json
     print("Received data:", data)
 
+    # Safely format data as a string
+    formatted_data = json.dumps(data, indent=2)[:1900]  # Discord limit is 2000 characters
+
     message = {
-        "content": f"🚨 New webhook received:\n```{data}```"
+        "content": f"🚨 New webhook received:\n```json\n{formatted_data}\n```"
     }
 
     if DISCORD_WEBHOOK_URL:
