@@ -13,7 +13,13 @@ def webhook():
     print("Received data:", data)
 
     # Safely format data as a string
-    formatted_data = json.dumps(data, indent=2)[:1900]  # Discord limit is 2000 characters
+    try:
+        block_data = data["event"]["data"]["block"]
+        formatted_data = json.dumps(block_data, indent=2)[:1900]  # Discord limit is 2000 characters
+    except (KeyError, TypeError) as e:
+        print(f"Error extracting block data: {e}")
+        # Fallback to sending the whole data if extraction fails
+        formatted_data = json.dumps(data, indent=2)[:1900]
 
     message = {
         "content": f"🚨 New webhook received:\n```json\n{formatted_data}\n```"
